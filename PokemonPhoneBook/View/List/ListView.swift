@@ -12,8 +12,9 @@ final class ListView: UIView {
     // 데이터
     private var phoneBooks: [PhoneBook] = []
     
-    func updatePhoneBooks(_ newPhoneBooks: [PhoneBook]) {
-        self.phoneBooks = newPhoneBooks
+    func updatePhoneBooks(_ newPhoneBooks: [PhoneBook]?) {
+        if newPhoneBooks == nil { return }
+        self.phoneBooks = newPhoneBooks!
         tableView.reloadData()
     }
     
@@ -57,7 +58,8 @@ extension ListView: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         let phoneBook = phoneBooks[indexPath.row]
-        cell.configure(with: phoneBook)
+        let isLastCell = indexPath.row == phoneBooks.count - 1
+        cell.configure(with: phoneBook, isLastCell: isLastCell)
         return cell
     }
 }
