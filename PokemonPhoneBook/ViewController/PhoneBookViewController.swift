@@ -74,6 +74,16 @@ class PhoneBookViewController: UIViewController {
     }
     
     @objc private func applyChanges() {
+        
+        // placeholder 체크와 빈 문자열 체크를 함께 처리
+        let name = phoneBookView.nameTextView.text == phoneBookView.namePlaceholder ? "" : phoneBookView.nameTextView.text ?? ""
+        let number = phoneBookView.phoneNumberTextView.text == phoneBookView.phoneNumberPlaceholder ? "" : phoneBookView.phoneNumberTextView.text ?? ""
+        
+        // 유효성 검사 - 값 유무
+        guard !name.isEmpty, !number.isEmpty,
+              let profileImage = phoneBookView.profileImageView.image else { return }
+        
+        
         guard let name = phoneBookView.nameTextView.text, !name.isEmpty,
               let phoneNumber = phoneBookView.phoneNumberTextView.text, !phoneNumber.isEmpty,
               let profileImage = phoneBookView.profileImageView.image else { return }
