@@ -75,18 +75,21 @@ class PhoneBookViewController: UIViewController {
     
     @objc private func applyChanges() {
         
-        // placeholder 체크와 빈 문자열 체크를 함께 처리
-        let name = phoneBookView.nameTextView.text == phoneBookView.namePlaceholder ? "" : phoneBookView.nameTextView.text ?? ""
-        let number = phoneBookView.phoneNumberTextView.text == phoneBookView.phoneNumberPlaceholder ? "" : phoneBookView.phoneNumberTextView.text ?? ""
+        // name과 phoneNumber의 텍스트 placeholder 체크
+        let name = (phoneBookView.nameTextView.text == phoneBookView.namePlaceholder 
+                    || phoneBookView.nameTextView.text?.isEmpty == true) ?
+                    "" : phoneBookView.nameTextView.text ?? ""
         
-        // 유효성 검사 - 값 유무
-        guard !name.isEmpty, !number.isEmpty,
-              let profileImage = phoneBookView.profileImageView.image else { return }
-        
-        
-        guard let name = phoneBookView.nameTextView.text, !name.isEmpty,
-              let phoneNumber = phoneBookView.phoneNumberTextView.text, !phoneNumber.isEmpty,
-              let profileImage = phoneBookView.profileImageView.image else { return }
+        let phoneNumber = (phoneBookView.phoneNumberTextView.text == phoneBookView.phoneNumberPlaceholder
+                           || phoneBookView.phoneNumberTextView.text?.isEmpty == true) ?
+                           "" : phoneBookView.phoneNumberTextView.text ?? ""
+
+        // 유효성 검사 - 값 유무 및 프로필 이미지 존재 여부 체크
+        guard !name.isEmpty, !phoneNumber.isEmpty, let profileImage = phoneBookView.profileImageView.image else {
+            showOneButtonAlert(title: "저장 오류", message: "모든 항목을 입력해주세요.")
+            return
+        }
+
         
         // 모드에 따라 변경사항 저장 방법 분기
         switch mode {
@@ -105,6 +108,13 @@ class PhoneBookViewController: UIViewController {
         coreDataRepository.saveContext()
         
         navigationController?.popViewController(animated: true)
+    }
+    
+    private func showOneButtonAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
     }
     
 }
