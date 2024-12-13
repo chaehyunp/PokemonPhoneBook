@@ -20,7 +20,7 @@
 - IDE: Xcode 16.1
 
 ### Project Target Version
-- iOS 16.0+
+- iOS 18.0+
 - Swift 5.0+
 
 ### Dependencies
